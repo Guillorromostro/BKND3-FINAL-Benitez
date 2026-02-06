@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+.DS_Store
+.vscode
+.idea
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+port.env
+coverage
+*.log

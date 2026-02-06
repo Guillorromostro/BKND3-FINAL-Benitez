@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pruebas API Mocks</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    button { margin-right: .5rem; margin-bottom: .5rem; }
+    pre { background: #111; color: #0f0; padding: 1rem; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>Pruebas API Mocks</h1>
+  <div>
+    <button id="health">Health</button>
+    <button id="mockPets">Mocking Pets (3)</button>
+    <button id="mockUsers">Mocking Users (5)</button>
+    <button id="insert">Insert users=10, pets=5</button>
+    <button id="listUsers">List Users</button>
+    <button id="listPets">List Pets</button>
+  </div>
+  <pre id="out">Listo para probar...</pre>
+
+  <script>
+    const out = document.getElementById('out');
+    const base = location.origin;
+    const log = (label, data) => { out.textContent = label + "\n" + JSON.stringify(data, null, 2); };
+
+    async function get(path) {
+      const res = await fetch(base + path);
+      return { status: res.status, data: await res.json() };
+    }
+    async function post(path, body) {
+      const res = await fetch(base + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      return { status: res.status, data: await res.json() };
+    }
+
+    document.getElementById('health').onclick = async () => log('Health', await get('/health'));
+    document.getElementById('mockPets').onclick = async () => log('Mocking Pets', await get('/api/mocks/mockingpets?qty=3'));
+    document.getElementById('mockUsers').onclick = async () => log('Mocking Users', await get('/api/mocks/mockingusers?qty=5'));
+    document.getElementById('insert').onclick = async () => log('Insert', await post('/api/mocks/generateData', { users: 10, pets: 5 }));
+    document.getElementById('listUsers').onclick = async () => log('Users', await get('/api/users'));
+    document.getElementById('listPets').onclick = async () => log('Pets', await get('/api/pets'));
+  </script>
+</body>
+</html>
